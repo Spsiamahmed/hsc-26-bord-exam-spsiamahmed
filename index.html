@@ -2,172 +2,740 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siam's HSC '26 Precise Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>সিয়ামের HSC ২৬ প্রো ড্যাশবোর্ড | স্মার্ট স্টাডি ট্র্যাকার project by sp siam Ahmed </title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            background: #f4f9ff;
+            color: #1e2a3e;
+            padding-bottom: 85px;
+        }
+
+        /* রিফ্রেশড কালার প্যালেট : প্রফেশনাল নীলাভ আভা */
         :root {
-            --deep-blue: #161099;
-            --medium-blue: #0977ba;
-            --sky-blue: #00befa;
-            --light-blue: #adebff;
-            --primary: var(--deep-blue);
-            --white: #ffffff;
-            --gray: #f8f9fa;
+            --primary-deep: #0a2b5e;
+            --primary-mid: #1e4a76;
+            --sky-accent: #2c9cd4;
+            --glow-light: #d9f0ff;
+            --soft-white: #ffffff;
+            --card-shadow: 0 12px 28px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.02);
+            --gold-star: #f9a826;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--gray); padding-bottom: 90px; }
-
-        .section { display: none; padding: 20px; animation: slideIn 0.3s ease-out; }
-        .active-section { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ঘড়ি ও প্রধান কার্ড */
-        .card { background: var(--white); border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; }
-        .clock-box { padding: 30px 10px; background: linear-gradient(135deg, var(--deep-blue), var(--sky-blue)); color: white; border-radius: 30px; }
-        .live-clock { font-family: 'Orbitron'; font-size: 2.8rem; margin: 10px 0; }
-
-        /* বক্র কাউন্টার ডিজাইন */
-        .counter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
-        .c-item { 
-            background: var(--light-blue); padding: 20px; border-radius: 30px; 
-            border: 1px solid rgba(0, 191, 250, 0.3); transition: 0.3s;
+        header {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            padding: 16px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(44, 156, 212, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1100;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
         }
-        .c-number { 
-            font-family: 'Orbitron'; color: var(--primary); font-size: 2.2rem; 
-            background: white; display: inline-block; width: 80px; height: 80px; 
-            line-height: 80px; border-radius: 50%; margin-bottom: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+
+        header h2 {
+            color: var(--primary-deep);
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: -0.3px;
         }
-        .c-label { font-weight: 700; color: var(--deep-blue); display: block; }
 
-        /* মোট দিনের হাইলাইট */
-        .total-highlight { background: #fff0f0; border: 2px dashed #ff7675; padding: 20px; border-radius: 25px; margin-bottom: 20px; }
-        .total-highlight h1 { font-family: 'Orbitron'; font-size: 3.5rem; color: #d63031; }
+        .section {
+            display: none;
+            padding: 20px 18px;
+            animation: fadeSlideUp 0.35s ease-out;
+        }
 
-        /* নেভিগেশন */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; height: 80px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 1000; }
-        .nav-item { text-align: center; color: #b2bec3; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--primary); }
+        .active-section {
+            display: block;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: var(--soft-white);
+            border-radius: 28px;
+            padding: 20px 18px;
+            margin-bottom: 22px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(30, 74, 118, 0.08);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ক্লক বক্স */
+        .clock-box {
+            background: linear-gradient(135deg, #0a2b5e, #1e4a76);
+            color: white;
+            border-radius: 32px;
+            text-align: center;
+            padding: 28px 12px;
+        }
+
+        .live-clock {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.6rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+            margin: 12px 0 5px;
+            background: rgba(255,255,255,0.12);
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 60px;
+            backdrop-filter: blur(2px);
+        }
+
+        .date-info {
+            font-weight: 500;
+            opacity: 0.92;
+        }
+
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .c-item {
+            background: #eef6fc;
+            border-radius: 24px;
+            padding: 14px 6px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .c-item h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            background: white;
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 60px;
+            color: var(--primary-deep);
+            margin-bottom: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .total-box {
+            background: linear-gradient(145deg, #fff6e8, #fff0e0);
+            border-left: 6px solid var(--gold-star);
+            text-align: center;
+        }
+
+        .total-box h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.4rem;
+            color: #c4450c;
+        }
+
+        /* সাবজেক্ট প্রগ্রেস */
+        .subject-progress-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
+        .subj-name {
+            font-weight: 700;
+            width: 110px;
+            font-size: 1rem;
+        }
+        .progress-bar-bg {
+            flex: 1;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-mid), var(--sky-accent));
+            border-radius: 20px;
+        }
+        .subj-percent {
+            width: 55px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary-deep);
+        }
+        input[type="range"] {
+            width: 140px;
+            accent-color: var(--sky-accent);
+        }
+
+        /* টাস্ক স্টাইল */
+        .task-list {
+            list-style: none;
+            margin-top: 5px;
+        }
+        .task-card {
+            background: white;
+            padding: 14px 16px;
+            border-radius: 22px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.02);
+            border-left: 5px solid var(--primary-mid);
+            transition: 0.2s;
+        }
+        .task-card.done {
+            border-left-color: #27ae60;
+            opacity: 0.7;
+            background: #f9fdfb;
+        }
+        .task-card.done .task-title {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        .task-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .task-time {
+            font-size: 0.75rem;
+            color: #5a6e7c;
+        }
+        .task-actions i {
+            font-size: 1.3rem;
+            margin-left: 12px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .fa-circle-check { color: #2ecc71; }
+        .fa-trash-can { color: #e67e22; }
+
+        .input-group {
+            background: #ffffffdd;
+            padding: 18px;
+            border-radius: 28px;
+            margin-bottom: 20px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 18px;
+            border: 1px solid #cbd5e1;
+            margin-bottom: 12px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .btn-add {
+            background: var(--primary-deep);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 13px;
+            border-radius: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        /* নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(12px);
+            height: 75px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #e9edf2;
+            z-index: 1200;
+        }
+        .nav-item {
+            text-align: center;
+            color: #8da0b0;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+            padding: 8px 0;
+        }
+        .nav-item i {
+            font-size: 1.6rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .nav-item span {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .nav-item.active {
+            color: var(--primary-deep);
+            transform: translateY(-4px);
+        }
+
+        .badge-pending {
+            background: #ff6b4a;
+            color: white;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            margin-left: 6px;
+        }
+
+        .edit-date {
+            background: #f1f5f9;
+            border-radius: 24px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        button.small-btn {
+            background: var(--sky-accent);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+        }
+        hr {
+            margin: 16px 0;
+        }
+        .quote-text {
+            font-style: italic;
+            font-weight: 500;
+            color: #2c3e66;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        i.fa, i.far, i.fas {
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body>
 
-    <header style="padding: 15px 20px; background: white; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
-        <h2 style="color:var(--primary)">সিয়াম আহমেদ</h2>
-        <i class="fa-solid fa-user-graduate" style="color:var(--sky-blue); font-size: 1.5rem;"></i>
-    </header>
+<header>
+    <h2><i class="fa-solid fa-chart-line" style="margin-right: 8px; color: #2c9cd4;"></i> সিয়াম আহমেদ <span style="font-size:0.8rem;">HSC ২৬</span></h2>
+    <i class="fa-solid fa-brain" style="font-size: 1.6rem; color: var(--sky-accent);"></i>
+</header>
 
-    <div id="home" class="section active-section">
-        <div class="card clock-box">
-            <p id="day-name">বার</p>
-            <h1 class="live-clock" id="clock">00:00:00</h1>
-            <p id="full-date">তারিখ</p>
-        </div>
+<!-- হোম সেকশন -->
+<div id="home" class="section active-section">
+    <div class="card clock-box">
+        <p id="day-name" style="font-weight:500;">বার</p>
+        <div class="live-clock" id="clock">--:--:--</div>
+        <p class="date-info" id="full-date"></p>
+    </div>
 
-        <div class="total-highlight">
-            <p style="font-weight: bold; color: #e17055;">মোট বাকি আছে</p>
-            <h1 id="total-days-big">000</h1>
-            <p style="font-weight: bold;">দিন মাত্র</p>
-        </div>
-
-        <div class="counter-grid">
-            <div class="c-item">
-                <div class="c-number" id="c-month">০</div>
-                <span class="c-label">মাস</span>
-            </div>
-            <div class="c-item">
-                <div class="c-number" id="c-day">০</div>
-                <span class="c-label">দিন</span>
-            </div>
-            <div class="c-item">
-                <div class="c-number" id="c-hour">০</div>
-                <span class="c-label">ঘণ্টা</span>
-            </div>
-            <div class="c-item">
-                <div class="c-number" id="c-min">০</div>
-                <span class="c-label">মিনিট</span>
-            </div>
+    <div class="card total-box">
+        <h3><i class="fa-regular fa-calendar-circle-exclamation"></i> HSC পরীক্ষা বাকি</h3>
+        <h1 id="total-days-big">---</h1>
+        <p style="font-weight:bold;">দিন (সর্বমোট)</p>
+        <div class="flex-between" style="justify-content: center; gap: 20px; margin-top: 10px;">
+            <span><i class="fa-regular fa-clock"></i> সপ্তাহ: <strong id="weeks-left">০</strong></span>
         </div>
     </div>
 
-    <div id="tasks" class="section">
-        <div class="card">
-            <h3>নতুন টাস্ক যোগ করো</h3><br>
-            <input type="text" id="sub" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;" placeholder="বিষয়">
-            <input type="time" id="tm" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;">
-            <button onclick="addTask()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">যোগ করো</button>
-        </div>
-        <ul id="t-list" style="list-style:none;"></ul>
+    <div class="counter-grid">
+        <div class="c-item"><h2 id="c-month">০</h2><p>মাস (প্রায়)</p></div>
+        <div class="c-item"><h2 id="c-day">০</h2><p>দিন</p></div>
+        <div class="c-item"><h2 id="c-hour">০</h2><p>ঘণ্টা</p></div>
+        <div class="c-item"><h2 id="c-min">০</h2><p>মিনিট</p></div>
     </div>
 
-    <nav class="bottom-nav">
-        <div class="nav-item active" onclick="show('home', this)"><i class="fa-solid fa-house"></i><br><span>হোম</span></div>
-        <div class="nav-item" onclick="show('tasks', this)"><i class="fa-solid fa-list-check"></i><br><span>কাজ</span></div>
-    </nav>
+    <!-- বিষয়ভিত্তিক অগ্রগতি (প্রিপারেশন) -->
+    <div class="card">
+        <h3 style="margin-bottom: 15px; display: flex; gap: 8px;"><i class="fa-solid fa-chart-simple" style="color: var(--primary-mid);"></i> পড়াশোনার অগ্রগতি</h3>
+        <div id="subject-progress-container"></div>
+        <div class="flex-between" style="margin-top: 12px;">
+            <span>সামগ্রিক অগ্রগতি:</span>
+            <strong id="overall-progress">0%</strong>
+        </div>
+        <div class="progress-bar-bg" style="margin-top: 8px;"><div id="overall-bar" class="progress-fill" style="width:0%"></div></div>
+        <p style="font-size: 0.75rem; margin-top: 12px; color:#4b6584;"><i class="fa-regular fa-lightbulb"></i> স্লাইড এডজাস্ট করে তোমার প্রস্তুতি ট্র্যাক রাখো</p>
+    </div>
+
+    <!-- মোটিভেশন কার্ড -->
+    <div class="card" style="border-left: 5px solid var(--gold-star);">
+        <p id="motivation-text" class="quote-text">"চেষ্টার বিকল্প নেই, প্রতিদিন একটু এগিয়ে যাও।"</p>
+        <p style="text-align:right; margin-top: 10px;"><i class="fa-regular fa-message"></i> আজকের স্টাডি মন্ত্র</p>
+    </div>
+</div>
+
+<!-- টাস্ক ম্যানেজার (পড়ার রুটিন) -->
+<div id="tasks" class="section">
+    <h2 style="margin-bottom: 16px; text-align:center;"><i class="fa-regular fa-list-check"></i> স্মার্ট টাস্ক লিস্ট</h2>
+    <div class="input-group">
+        <input type="text" id="task-subject" placeholder="বিষয় / অধ্যায় (যেমন: ফিজিক্স ১ম পত্র)">
+        <input type="time" id="task-time">
+        <button class="btn-add" id="addTaskBtn"><i class="fa-regular fa-plus"></i> টাস্ক যুক্ত করো</button>
+    </div>
+    <ul id="task-list-ui" class="task-list"></ul>
+    <button id="clearAllTasksBtn" style="background: none; border: 1px solid #ccc; width: 100%; padding: 12px; border-radius: 28px; margin-top: 8px;"><i class="fa-regular fa-trash-can"></i> সব টাস্ক রিসেট</button>
+</div>
+
+<!-- রুটিন / গাইডলাইন -->
+<div id="routine" class="section">
+    <div class="card">
+        <h2 style="color: var(--primary-deep);"><i class="fa-regular fa-calendar-check"></i> সোনার রুটিন (HSC ফোকাস)</h2>
+        <div style="margin-top: 16px; line-height: 2;">
+            <p>🌅 <strong>সকাল ৬:০০</strong> – ফজর + হালকা রিভিশন</p>
+            <p>📘 <strong>৭:০০ - ৯:৩০</strong> – কঠিন বিষয় (উচ্চতর গণিত/পদার্থ)</p>
+            <p>☕ <strong>৯:৩০ - ১০:০০</strong> – ব্রেক ও নাস্তা</p>
+            <p>🧪 <strong>১০:০০ - ১২:৩০</strong> – রসায়ন ও জীববিজ্ঞান/আইসিটি</p>
+            <p>🕌 <strong>১২:৩০ - ২:০০</strong> – জোহর + বিশ্রাম</p>
+            <p>📝 <strong>২:০০ - ৪:০০</strong> – ব্যাকরণ, ইংরেজি ও প্র্যাকটিস শিট</p>
+            <p>⚡ <strong>৪:০০ - ৫:০০</strong> – হাঁটা / ফ্রেশ আপ</p>
+            <p>🎯 <strong>৫:০০ - ৭:০০</strong> – মডেল টেস্ট বা বোর্ড প্রশ্ন সমাধান</p>
+            <p>🌙 <strong>৮:০০ - ১০:০০</strong> – টপিক অনুযায়ী পড়া + টাস্ক আপডেট</p>
+            <p>📖 <strong>১০:০০ - ১১:০০</strong> – দিনের শেষ রিভিশন ও ঘুমের প্রস্তুতি</p>
+        </div>
+        <hr>
+        <p><i class="fa-regular fa-circle-info"></i> <strong>প্রতিদিন ২ ঘণ্টা ম্যাথ প্র্যাকটিস আবশ্যক!</strong></p>
+    </div>
+    <div class="card">
+        <h3><i class="fa-regular fa-star"></i> মাস্টার টিপস</h3>
+        <p>✅ প্রতিটি টপিক কমপক্ষে ২ বার রিভিশন দাও। <br> ✅ বিগত বছরের বোর্ড প্রশ্ন সলভ করো। <br> ✅ টাইমার সেট করে টেস্ট দাও।</p>
+    </div>
+</div>
+
+<!-- প্রোফাইল + এক্সাম ডেট সেটিং -->
+<div id="profile" class="section">
+    <div class="card" style="text-align: center;">
+        <i class="fa-solid fa-user-astronaut" style="font-size: 4rem; color: var(--primary-deep);"></i>
+        <h2 style="margin: 8px 0;">সিয়াম আহমেদ (Siam)</h2>
+        <p>HSC ২০২৬ | বিজ্ঞান বিভাগ</p>
+        <p><i class="fa-regular fa-location-dot"></i> স্বপ্নের লক্ষ্য: BUET + A+</p>
+        <hr>
+        <div class="edit-date">
+            <label><i class="fa-regular fa-calendar-pen"></i> পরীক্ষার তারিখ পরিবর্তন করুন:</label>
+            <input type="date" id="examDatePicker" style="width: 100%; margin: 10px 0; padding: 10px; border-radius: 20px;">
+            <button id="updateExamDateBtn" class="small-btn">তারিখ সেট করো</button>
+            <p style="font-size: 0.75rem; margin-top: 8px;">ডিফল্ট: ৭ জুন, ২০২৬ (বাংলাদেশ HSC রুটিন অনুযায়ী)</p>
+        </div>
+        <hr>
+        <h4><i class="fa-regular fa-chart-line"></i> আজকের মোটিভেশন</h4>
+        <button id="refreshQuoteBtn" style="background: none; border: none; color: var(--sky-accent);"><i class="fa-regular fa-arrows-rotate"></i> নতুন উক্তি আনো</button>
+    </div>
+    <div class="card">
+        <h3><i class="fa-regular fa-clock"></i> স্টাডি মেট্রিক্স</h3>
+        <p>✅ মোট টাস্ক সম্পন্ন: <span id="completedTasksCount">0</span></p>
+        <p>📊 প্রিপারেশন প্রগ্রেস: <span id="overallProgressDisplay">0</span>%</p>
+        <progress id="globalProgressBar" value="0" max="100" style="width:100%; height:12px; border-radius: 20px;"></progress>
+    </div>
+</div>
+
+<!-- নেভ বার -->
+<nav class="bottom-nav">
+    <div class="nav-item active" data-nav="home"><i class="fa-solid fa-house-chimney"></i><span>হোম</span></div>
+    <div class="nav-item" data-nav="tasks"><i class="fa-solid fa-list-check"></i><span>টাস্ক</span></div>
+    <div class="nav-item" data-nav="routine"><i class="fa-solid fa-table-list"></i><span>রুটিন</span></div>
+    <div class="nav-item" data-nav="profile"><i class="fa-solid fa-user"></i><span>প্রোফাইল</span></div>
+</nav>
 
 <script>
-    const bnNums = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-    const daysBn = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
-    // পরীক্ষার তারিখ: ৭ জুন, ২০২৬
-    const examDate = new Date("June 7, 2026 09:00:00").getTime();
+    // ---------------------------- গ্লোবাল ভেরিয়েবল ----------------------------
+    let examTimestamp = new Date("June 7, 2026 09:00:00").getTime();   // default
+    let tasks = [];
+    let subjectsData = [
+        { name: "পদার্থবিজ্ঞান", progress: 42 },
+        { name: "রসায়ন", progress: 38 },
+        { name: "উচ্চতর গণিত", progress: 35 },
+        { name: "জীববিজ্ঞান / আইসিটি", progress: 50 },
+        { name: "ইংরেজি ১ম ও ২য়", progress: 55 }
+    ];
 
-    function toBn(n) { return n.toString().split('').map(d => bnNums[d] || d).join(''); }
+    // বাংলা সংখ্যা ফাংশন
+    function toBn(n) {
+        let bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        return n.toString().split('').map(d => bnDigits[d] || d).join('');
+    }
 
-    function update() {
-        const now = new Date();
-        
-        // লাইভ ঘড়ি
-        let h = now.getHours();
-        let m = now.getMinutes();
-        let s = now.getSeconds();
-        let session = h >= 12 ? "PM" : "AM";
-        h = h % 12 || 12;
-        document.getElementById('clock').innerText = `${toBn(h)}:${toBn(m < 10 ? '0'+m : m)}:${toBn(s < 10 ? '0'+s : s)} ${session}`;
-        document.getElementById('day-name').innerText = daysBn[now.getDay()];
-        document.getElementById('full-date').innerText = now.toLocaleDateString('bn-BD', { day:'numeric', month:'long', year:'numeric' });
-
-        // কাউন্টডাউন ক্যালকুলেশন
-        const gap = examDate - now.getTime();
-        const d_ms = 1000 * 60 * 60 * 24;
-        
-        const totalDays = Math.floor(gap / d_ms);
+    // কাউন্টডাউন আপডেট
+    function updateCountdown() {
+        const now = new Date().getTime();
+        let gap = examTimestamp - now;
+        if (gap <= 0) {
+            document.getElementById('total-days-big').innerText = "০";
+            document.getElementById('c-month').innerText = "০";
+            document.getElementById('c-day').innerText = "০";
+            document.getElementById('c-hour').innerText = "০";
+            document.getElementById('c-min').innerText = "০";
+            document.getElementById('weeks-left').innerText = "০";
+            return;
+        }
+        const totalDays = Math.floor(gap / (1000 * 60 * 60 * 24));
+        const weeks = Math.floor(totalDays / 7);
         const months = Math.floor(totalDays / 30);
         const remDays = totalDays % 30;
-        const hours = Math.floor((gap % d_ms) / (1000 * 60 * 60));
-        const mins = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+        const hours = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
 
         document.getElementById('total-days-big').innerText = toBn(totalDays);
         document.getElementById('c-month').innerText = toBn(months);
         document.getElementById('c-day').innerText = toBn(remDays);
         document.getElementById('c-hour').innerText = toBn(hours);
-        document.getElementById('c-min').innerText = toBn(mins);
+        document.getElementById('c-min').innerText = toBn(minutes);
+        document.getElementById('weeks-left').innerText = toBn(weeks);
     }
 
-    function show(id, el) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-        document.getElementById(id).classList.add('active-section');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
+    // ঘড়ি ও তারিখ
+    function updateClock() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        const timeStr = `${toBn(hours)}:${toBn(minutes < 10 ? '0'+minutes : minutes)}:${toBn(seconds < 10 ? '0'+seconds : seconds)} ${ampm}`;
+        document.getElementById('clock').innerText = timeStr;
+        const daysBn = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+        document.getElementById('day-name').innerText = daysBn[now.getDay()];
+        document.getElementById('full-date').innerHTML = now.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    function addTask() {
-        const s = document.getElementById('sub').value;
-        const t = document.getElementById('tm').value;
-        if(!s || !t) return;
-        const li = document.createElement('li');
-        li.style = "background:white; padding:15px; border-radius:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border-left:5px solid var(--primary);";
-        li.innerHTML = `<div><b>${s}</b><br><small>${t}</small></div><i class="fa-solid fa-circle-check" style="color:#00b894; font-size:1.5rem;" onclick="this.parentElement.style.opacity='0.5'"></i>`;
-        document.getElementById('t-list').appendChild(li);
-        document.getElementById('sub').value = '';
+    // সাবজেক্ট প্রগ্রেস UI রেন্ডার
+    function renderSubjectProgress() {
+        const container = document.getElementById('subject-progress-container');
+        if (!container) return;
+        container.innerHTML = '';
+        let total = 0;
+        subjectsData.forEach((sub, idx) => {
+            total += sub.progress;
+            const div = document.createElement('div');
+            div.className = 'subject-progress-item';
+            div.innerHTML = `
+                <span class="subj-name">${sub.name}</span>
+                <div class="progress-bar-bg"><div class="progress-fill" style="width: ${sub.progress}%;"></div></div>
+                <span class="subj-percent">${sub.progress}%</span>
+                <input type="range" min="0" max="100" value="${sub.progress}" data-index="${idx}" class="subj-slider">
+            `;
+            container.appendChild(div);
+        });
+        const overallAvg = subjectsData.length ? Math.round(total / subjectsData.length) : 0;
+        document.getElementById('overall-progress').innerText = overallAvg + '%';
+        document.getElementById('overall-bar').style.width = overallAvg + '%';
+        document.getElementById('overallProgressDisplay').innerText = overallAvg;
+        document.getElementById('globalProgressBar').value = overallAvg;
+        localStorage.setItem('hsc_subjects', JSON.stringify(subjectsData));
+        // ইভেন্ট লিসেনার
+        document.querySelectorAll('.subj-slider').forEach(slider => {
+            slider.addEventListener('input', function(e) {
+                const idx = this.dataset.index;
+                subjectsData[idx].progress = parseInt(this.value);
+                renderSubjectProgress();
+                updateTaskCompletedCount(); // আপডেট প্রোফাইল প্রগ্রেস
+            });
+        });
     }
 
-    setInterval(update, 1000);
-    update();
+    // টাস্ক লিস্ট রেন্ডার
+    function renderTasks() {
+        const container = document.getElementById('task-list-ui');
+        if (!container) return;
+        container.innerHTML = '';
+        if (tasks.length === 0) {
+            container.innerHTML = '<li class="card" style="text-align:center;">📭 এখনো কোনো টাস্ক যোগ করো নি। নতুন টাস্ক যোগ করো!</li>';
+        } else {
+            tasks.forEach((task, idx) => {
+                const li = document.createElement('li');
+                li.className = `task-card ${task.done ? 'done' : ''}`;
+                let timeDisplay = '';
+                if (task.time) {
+                    let [hour24, minute] = task.time.split(':');
+                    let h = parseInt(hour24);
+                    let suffix = h >= 12 ? 'PM' : 'AM';
+                    let hour12 = h % 12 || 12;
+                    timeDisplay = `${toBn(hour12)}:${toBn(minute)} ${suffix}`;
+                }
+                li.innerHTML = `
+                    <div>
+                        <div class="task-title">${escapeHtml(task.subject)}</div>
+                        <div class="task-time"><i class="fa-regular fa-bell"></i> ${timeDisplay || 'যেকোনো সময়'}</div>
+                    </div>
+                    <div class="task-actions">
+                        <i class="fa-regular fa-circle-check" data-action="toggle" data-idx="${idx}"></i>
+                        <i class="fa-regular fa-trash-can" data-action="delete" data-idx="${idx}"></i>
+                    </div>
+                `;
+                container.appendChild(li);
+            });
+        }
+        updateTaskCompletedCount();
+        localStorage.setItem('hsc_tasks', JSON.stringify(tasks));
+    }
+
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    function addNewTask() {
+        const subject = document.getElementById('task-subject').value.trim();
+        const timeVal = document.getElementById('task-time').value;
+        if (!subject) {
+            alert("বিষয় লিখুন প্লিজ!");
+            return;
+        }
+        tasks.push({ subject: subject, time: timeVal, done: false, id: Date.now() });
+        renderTasks();
+        document.getElementById('task-subject').value = '';
+        document.getElementById('task-time').value = '';
+    }
+
+    function deleteTask(idx) { tasks.splice(idx, 1); renderTasks(); }
+    function toggleTask(idx) { tasks[idx].done = !tasks[idx].done; renderTasks(); }
+
+    function updateTaskCompletedCount() {
+        const completed = tasks.filter(t => t.done).length;
+        document.getElementById('completedTasksCount').innerText = completed;
+        // subject overall progress already updated separately
+    }
+
+    // exam date picker & storage
+    function setExamDateAndSave(dateStr) {
+        const newDate = new Date(dateStr);
+        if (!isNaN(newDate.getTime())) {
+            examTimestamp = newDate.getTime();
+            localStorage.setItem('hsc_exam_date', dateStr);
+            updateCountdown();
+        }
+    }
+
+    function loadExamDate() {
+        const saved = localStorage.getItem('hsc_exam_date');
+        if (saved) {
+            const parsed = new Date(saved);
+            if (!isNaN(parsed.getTime())) {
+                examTimestamp = parsed.getTime();
+                document.getElementById('examDatePicker').value = saved;
+                return;
+            }
+        }
+        document.getElementById('examDatePicker').value = "2026-06-07";
+    }
+
+    // মোটিভেশনাল বাণী
+    const quotes = [
+        "যত কঠিন পরিশ্রম, তত মধুর সাফল্য। HSC যুদ্ধ জিততে প্রতিদিন ১% উন্নতি করো।",
+        "পড়ার ভয়কে জয় করো, সাফল্য নিজেই ধরা দেবে।",
+        "বোর্ড পরীক্ষার আগে ১০টি মডেল টেস্ট কমপক্ষে দিও।",
+        "আজকের ছোট অবহেলা আগামীকালের বড় আফসোস। পড়তে বসো এখনই।",
+        "নিজেকে বিশ্বাস করো, তুমি পারবে। A+ তোমারই হবে।",
+        "পদার্থবিজ্ঞানের সূত্র আয়ত্ত করতে নিয়মিত অনুশীলন জরুরি।",
+        "উচ্চতর গণিত ভয় নয়, বরং মজা। প্রতিদিন ২০টি সমস্যা সমাধান করো।"
+    ];
+    function setRandomQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        document.getElementById('motivation-text').innerHTML = `❝ ${quotes[randomIndex]} ❞`;
+    }
+
+    // ইভেন্ট হ্যান্ডেল (টাস্কের অ্যাকশন)
+    function setupTaskDelegation() {
+        const taskContainer = document.getElementById('task-list-ui');
+        if (!taskContainer) return;
+        taskContainer.addEventListener('click', (e) => {
+            const target = e.target;
+            const action = target.getAttribute('data-action');
+            const idx = target.getAttribute('data-idx');
+            if (action === 'toggle' && idx !== null) toggleTask(parseInt(idx));
+            if (action === 'delete' && idx !== null) deleteTask(parseInt(idx));
+        });
+    }
+
+    function clearAllTasks() { if(confirm('সকল টাস্ক মুছে ফেলতে চান?')){ tasks = []; renderTasks(); } }
+
+    // লোড স্টোরেজ ডাটা
+    function loadLocalData() {
+        const storedTasks = localStorage.getItem('hsc_tasks');
+        if (storedTasks) {
+            try { tasks = JSON.parse(storedTasks); } catch(e){ tasks = []; }
+        } else tasks = [];
+        const storedSubjects = localStorage.getItem('hsc_subjects');
+        if (storedSubjects) {
+            try { subjectsData = JSON.parse(storedSubjects); } catch(e) {}
+        }
+        renderTasks();
+        renderSubjectProgress();
+    }
+
+    // নেভিগেশন
+    function initNavigation() {
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = ['home', 'tasks', 'routine', 'profile'];
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const navId = item.getAttribute('data-nav');
+                if (!navId) return;
+                sections.forEach(sec => {
+                    const secEl = document.getElementById(sec);
+                    if (secEl) secEl.classList.remove('active-section');
+                });
+                const activeSec = document.getElementById(navId);
+                if (activeSec) activeSec.classList.add('active-section');
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+    }
+
+    // প্রোফাইল ও অন্যান্য বাটন
+    function bindButtons() {
+        document.getElementById('addTaskBtn')?.addEventListener('click', addNewTask);
+        document.getElementById('clearAllTasksBtn')?.addEventListener('click', clearAllTasks);
+        document.getElementById('updateExamDateBtn')?.addEventListener('click', () => {
+            const picker = document.getElementById('examDatePicker');
+            if (picker && picker.value) setExamDateAndSave(picker.value);
+        });
+        document.getElementById('refreshQuoteBtn')?.addEventListener('click', setRandomQuote);
+    }
+
+    // পারফরম্যান্স সেট ইন্টারভাল
+    setInterval(() => { updateClock(); updateCountdown(); }, 1000);
+    
+    // বুটস্ট্রাপ
+    window.addEventListener('DOMContentLoaded', () => {
+        loadExamDate();
+        loadLocalData();
+        updateClock();
+        updateCountdown();
+        setRandomQuote();
+        initNavigation();
+        setupTaskDelegation();
+        bindButtons();
+        renderSubjectProgress();  // re-render for sliders
+        updateTaskCompletedCount();
+    });
 </script>
 </body>
-  </html>
+            </html>
