@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siam's HSC '26 Precise Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        :root {
+            --deep-blue: #161099;
+            --medium-blue: #0977ba;
+            --sky-blue: #00befa;
+            --light-blue: #adebff;
+            --primary: var(--deep-blue);
+            --white: #ffffff;
+            --gray: #f8f9fa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background: var(--gray); padding-bottom: 90px; }
+
+        .section { display: none; padding: 20px; animation: slideIn 0.3s ease-out; }
+        .active-section { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ঘড়ি ও প্রধান কার্ড */
+        .card { background: var(--white); border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; }
+        .clock-box { padding: 30px 10px; background: linear-gradient(135deg, var(--deep-blue), var(--sky-blue)); color: white; border-radius: 30px; }
+        .live-clock { font-family: 'Orbitron'; font-size: 2.8rem; margin: 10px 0; }
+
+        /* বক্র কাউন্টার ডিজাইন */
+        .counter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        .c-item { 
+            background: var(--light-blue); padding: 20px; border-radius: 30px; 
+            border: 1px solid rgba(0, 191, 250, 0.3); transition: 0.3s;
+        }
+        .c-number { 
+            font-family: 'Orbitron'; color: var(--primary); font-size: 2.2rem; 
+            background: white; display: inline-block; width: 80px; height: 80px; 
+            line-height: 80px; border-radius: 50%; margin-bottom: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        .c-label { font-weight: 700; color: var(--deep-blue); display: block; }
+
+        /* মোট দিনের হাইলাইট */
+        .total-highlight { background: #fff0f0; border: 2px dashed #ff7675; padding: 20px; border-radius: 25px; margin-bottom: 20px; }
+        .total-highlight h1 { font-family: 'Orbitron'; font-size: 3.5rem; color: #d63031; }
+
+        /* নেভিগেশন */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; height: 80px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 1000; }
+        .nav-item { text-align: center; color: #b2bec3; cursor: pointer; flex: 1; }
+        .nav-item.active { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <header style="padding: 15px 20px; background: white; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+        <h2 style="color:var(--primary)">সিয়াম আহমেদ</h2>
+        <i class="fa-solid fa-user-graduate" style="color:var(--sky-blue); font-size: 1.5rem;"></i>
+    </header>
+
+    <div id="home" class="section active-section">
+        <div class="card clock-box">
+            <p id="day-name">বার</p>
+            <h1 class="live-clock" id="clock">00:00:00</h1>
+            <p id="full-date">তারিখ</p>
+        </div>
+
+        <div class="total-highlight">
+            <p style="font-weight: bold; color: #e17055;">মোট বাকি আছে</p>
+            <h1 id="total-days-big">000</h1>
+            <p style="font-weight: bold;">দিন মাত্র</p>
+        </div>
+
+        <div class="counter-grid">
+            <div class="c-item">
+                <div class="c-number" id="c-month">০</div>
+                <span class="c-label">মাস</span>
+            </div>
+            <div class="c-item">
+                <div class="c-number" id="c-day">০</div>
+                <span class="c-label">দিন</span>
+            </div>
+            <div class="c-item">
+                <div class="c-number" id="c-hour">০</div>
+                <span class="c-label">ঘণ্টা</span>
+            </div>
+            <div class="c-item">
+                <div class="c-number" id="c-min">০</div>
+                <span class="c-label">মিনিট</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="tasks" class="section">
+        <div class="card">
+            <h3>নতুন টাস্ক যোগ করো</h3><br>
+            <input type="text" id="sub" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;" placeholder="বিষয়">
+            <input type="time" id="tm" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;">
+            <button onclick="addTask()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">যোগ করো</button>
+        </div>
+        <ul id="t-list" style="list-style:none;"></ul>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="show('home', this)"><i class="fa-solid fa-house"></i><br><span>হোম</span></div>
+        <div class="nav-item" onclick="show('tasks', this)"><i class="fa-solid fa-list-check"></i><br><span>কাজ</span></div>
+    </nav>
+
+<script>
+    const bnNums = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    const daysBn = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+    // পরীক্ষার তারিখ: ৭ জুন, ২০২৬
+    const examDate = new Date("June 7, 2026 09:00:00").getTime();
+
+    function toBn(n) { return n.toString().split('').map(d => bnNums[d] || d).join(''); }
+
+    function update() {
+        const now = new Date();
+        
+        // লাইভ ঘড়ি
+        let h = now.getHours();
+        let m = now.getMinutes();
+        let s = now.getSeconds();
+        let session = h >= 12 ? "PM" : "AM";
+        h = h % 12 || 12;
+        document.getElementById('clock').innerText = `${toBn(h)}:${toBn(m < 10 ? '0'+m : m)}:${toBn(s < 10 ? '0'+s : s)} ${session}`;
+        document.getElementById('day-name').innerText = daysBn[now.getDay()];
+        document.getElementById('full-date').innerText = now.toLocaleDateString('bn-BD', { day:'numeric', month:'long', year:'numeric' });
+
+        // কাউন্টডাউন ক্যালকুলেশন
+        const gap = examDate - now.getTime();
+        const d_ms = 1000 * 60 * 60 * 24;
+        
+        const totalDays = Math.floor(gap / d_ms);
+        const months = Math.floor(totalDays / 30);
+        const remDays = totalDays % 30;
+        const hours = Math.floor((gap % d_ms) / (1000 * 60 * 60));
+        const mins = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById('total-days-big').innerText = toBn(totalDays);
+        document.getElementById('c-month').innerText = toBn(months);
+        document.getElementById('c-day').innerText = toBn(remDays);
+        document.getElementById('c-hour').innerText = toBn(hours);
+        document.getElementById('c-min').innerText = toBn(mins);
+    }
+
+    function show(id, el) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+        document.getElementById(id).classList.add('active-section');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function addTask() {
+        const s = document.getElementById('sub').value;
+        const t = document.getElementById('tm').value;
+        if(!s || !t) return;
+        const li = document.createElement('li');
+        li.style = "background:white; padding:15px; border-radius:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border-left:5px solid var(--primary);";
+        li.innerHTML = `<div><b>${s}</b><br><small>${t}</small></div><i class="fa-solid fa-circle-check" style="color:#00b894; font-size:1.5rem;" onclick="this.parentElement.style.opacity='0.5'"></i>`;
+        document.getElementById('t-list').appendChild(li);
+        document.getElementById('sub').value = '';
+    }
+
+    setInterval(update, 1000);
+    update();
+</script>
+</body>
+  </html>
